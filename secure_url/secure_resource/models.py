@@ -18,7 +18,8 @@ class SecureUrl(models.Model):
 
     def __str__(self):
         return self.source_url
-    
+
+
 class SecureFile(models.Model):
     source_file = models.FileField(upload_to=get_file_path, null=False)
     password = models.CharField(max_length=128, default=generate_password)
