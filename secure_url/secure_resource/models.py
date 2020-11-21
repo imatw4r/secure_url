@@ -4,6 +4,7 @@ import datetime
 from django.urls import reverse
 from django.db import models
 from django.utils.crypto import get_random_string
+from django.utils import timezone
 
 URL_EXPIRATION_TIME = 24 * 60 * 60  # 24h
 
@@ -17,7 +18,7 @@ def get_file_path(instance, filename):
 
 
 def set_expiration_date():
-    return datetime.datetime.utcnow() + datetime.timedelta(seconds=URL_EXPIRATION_TIME)
+    return timezone.now() + datetime.timedelta(seconds=URL_EXPIRATION_TIME)
 
 
 class SecureUrl(models.Model):
@@ -43,7 +44,7 @@ class SecureFile(models.Model):
 
 
 class FileRedirect(models.Model):
-    source = models.ForeignKey(
+    source = models.OneToOneField(
         SecureFile, on_delete=models.CASCADE, related_name="redirect"
     )
     expires_in = models.DateTimeField(default=set_expiration_date, null=False)
@@ -59,7 +60,7 @@ class FileRedirect(models.Model):
 
 
 class UrlRedirect(models.Model):
-    source = models.ForeignKey(
+    source = models.OneToOneField(
         SecureUrl, on_delete=models.CASCADE, related_name="redirect"
     )
     expires_in = models.DateTimeField(default=set_expiration_date, null=False)

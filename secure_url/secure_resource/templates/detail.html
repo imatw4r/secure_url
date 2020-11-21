@@ -1,11 +1,3 @@
-<p>
-  Password: <br />
-  {{ object.password }}
-</p>
-<p>
-  Expires at: {{ object.redirect.first.expires_in |date:"D d M Y h:i a e" }}
-</p>
-<p>
-  Secure URL:
-  <a href="{{ object.redirect.first.get_absolute_url }}">Click me</a>
-</p>
+<p>Password: {{ object.password }}</p>
+<p>Expires at: '{{ object.redirect.expires_in |date:"D d M Y h:i a e" }}'</p>
+<p>Secure URL: <a href="{{ object.redirect.get_absolute_url }}">Click</a></p>

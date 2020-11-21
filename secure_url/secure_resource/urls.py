@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 
 import secure_resource.views as views
 from secure_resource.api.routes import router
@@ -9,8 +9,17 @@ urlpatterns = [
     path(
         "file/detail/<int:pk>", views.SecureFileDetailView.as_view(), name="file-detail"
     ),
+    path(
+        "file/redirect/<int:pk>",
+        views.redirect_file_view,
+        name="file-redirect",
+    ),
     path("url/create", views.SecureUrlCreateView.as_view(), name="url-create"),
     path("url/detail/<int:pk>", views.SecureUrlDetailView.as_view(), name="url-detail"),
+    path(
+        "url/redirect/<int:pk>",
+        views.redirect_url_view,
+        name="url-redirect",
+    ),
+    path("api/", include(router.urls)),
 ]
-
-urlpatterns += router.urls

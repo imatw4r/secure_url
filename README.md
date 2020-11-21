@@ -1,7 +1,7 @@
 # Functionalities:
 
-- [ ] A form that adds links or files for protection
-- [ ] Generating links protected with a password
+- [x] A form that adds links or files for protection
+- [x] Generating links protected with a password
 - [ ] Expiry of links after a specified time
 - [ ] A form that allows you to go to a secured link or download a protected file
 - [ ] Counting correct redirects
