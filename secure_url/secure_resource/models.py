@@ -40,3 +40,35 @@ class SecureFile(models.Model):
 
     def get_absolute_url(self):
         return reverse("file-detail", kwargs={"pk": self.pk})
+
+
+class FileRedirect(models.Model):
+    source = models.ForeignKey(
+        SecureFile, on_delete=models.CASCADE, related_name="redirect"
+    )
+    expires_in = models.DateTimeField(default=set_expiration_date, null=False)
+
+    def get_absolute_url(self):
+        return reverse("file-redirect", kwargs={"pk": self.pk})
+
+    def get_source_url(self):
+        return self.source.source_file.url
+
+    def get_password(self):
+        return self.source.password
+
+
+class UrlRedirect(models.Model):
+    source = models.ForeignKey(
+        SecureUrl, on_delete=models.CASCADE, related_name="redirect"
+    )
+    expires_in = models.DateTimeField(default=set_expiration_date, null=False)
+
+    def get_absolute_url(self):
+        return reverse("url-redirect", kwargs={"pk": self.pk})
+
+    def get_source_url(self):
+        return self.source.source_url
+
+    def get_password(self):
+        return self.source.password

@@ -1,0 +1,5 @@
+<p>You are about to be redirected, please provide password.</p>
+<form method="post">
+  {% csrf_token %} {{ form.as_p }}
+  <button type="submit">Confirm</button>
+</form>
