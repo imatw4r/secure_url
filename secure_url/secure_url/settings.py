@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    "secure_resource",
+    # It is required to add application this way
+    # as otherwise signals are not loaded
+    "secure_resource.apps.SecureResourceConfig",
 ]
 
 MIDDLEWARE = [
