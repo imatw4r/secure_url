@@ -139,4 +139,4 @@ cython_debug/
 
 .vscode
 # Ignore secure url file uploads
-secure_url/file/*
+media/
