@@ -1,5 +1,6 @@
-from secure_resource.models import SecureFile, SecureUrl
 from rest_framework.serializers import ModelSerializer
+
+from secure_resource.models import SecureFile, SecureUrl
 
 
 class SecureUrlSerializer(ModelSerializer):

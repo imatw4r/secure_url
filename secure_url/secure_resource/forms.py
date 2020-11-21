@@ -1,8 +1,8 @@
-from secure_resource.models import SecureFile, SecureUrl
-
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.detail import DetailView
+
+from secure_resource.models import SecureFile, SecureUrl
 
 
 class UrlCreateForm(forms.ModelForm):

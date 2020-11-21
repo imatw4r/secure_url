@@ -1,6 +1,8 @@
 from django.urls import path
-from secure_resource.api.routes import router
+
 import secure_resource.views as views
+from secure_resource.api.routes import router
+
 
 urlpatterns = [
     path("file/create", views.SecureFileCreateView.as_view(), name="file-create"),

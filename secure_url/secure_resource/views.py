@@ -1,7 +1,8 @@
-from secure_resource.models import SecureFile, SecureUrl, FileRedirect, UrlRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView
 from django.views.generic.detail import DetailView
+
+from secure_resource.models import SecureFile, SecureUrl, FileRedirect, UrlRedirect
 
 
 class SecureUrlCreateView(LoginRequiredMixin, CreateView):
