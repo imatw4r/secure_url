@@ -9,5 +9,5 @@
 - [ ] REST API
 - [x] The secured endpoint for adding elements
 - [ ] The secured endpoint for downloading statistics (see example)
-- [ ] An open endpoint to access secure items (if the password was correct)
+- [x] An open endpoint to access secure items (if the password was correct)
 - [x] Admin panel
