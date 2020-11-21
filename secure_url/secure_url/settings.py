@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+import environ
+
+env = environ.Env(DEBUG=(bool, True))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "!4(wuy*d-&b+^q$y%^s#brr3u3t0!#^b2&t4n$re3hrcu^zlm#"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = []
 
@@ -133,3 +136,5 @@ MEDIA_URL = "/media/"
 LOGIN_REDIRECT_URL = "/home"
 
 LOGIN_URL = "/login/"
+
+URL_EXPIRATION_TIME = env("URL_EXPIRATION_TIME", default=24 * 60 * 60)

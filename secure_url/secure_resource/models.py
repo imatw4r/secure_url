@@ -5,8 +5,7 @@ from django.urls import reverse
 from django.db import models
 from django.utils.crypto import get_random_string
 from django.utils import timezone
-
-URL_EXPIRATION_TIME = 24 * 60 * 60  # 24h
+from django.conf import settings
 
 
 def generate_password() -> str:
@@ -18,7 +17,7 @@ def get_file_path(instance, filename):
 
 
 def set_expiration_date():
-    return timezone.now() + datetime.timedelta(seconds=URL_EXPIRATION_TIME)
+    return timezone.now() + datetime.timedelta(seconds=settings.URL_EXPIRATION_TIME)
 
 
 class SecureUrl(models.Model):
