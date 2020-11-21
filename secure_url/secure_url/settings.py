@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     # It is required to add application this way
     # as otherwise signals are not loaded
     "secure_resource.apps.SecureResourceConfig",
+    "user_agent",
 ]
 
 MIDDLEWARE = [
@@ -52,6 +53,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "user_agent.middleware.store_user_agent",
 ]
 
 ROOT_URLCONF = "secure_url.urls"
