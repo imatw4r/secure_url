@@ -7,7 +7,7 @@
 - [ ] Counting correct redirects
 - [ ] User Agent saving
 - [ ] REST API
-- [ ] The secured endpoint for adding elements
+- [x] The secured endpoint for adding elements
 - [ ] The secured endpoint for downloading statistics (see example)
 - [ ] An open endpoint to access secure items (if the password was correct)
 - [x] Admin panel

@@ -1,8 +1,9 @@
 from rest_framework.viewsets import ModelViewSet
 from secure_resource.models import SecureFile, SecureUrl
-from secure_resource.api.serializers import SecureFileSerializer, SecureUrlSerializer
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework import permissions
+
+from .serializers import SecureFileSerializer, SecureUrlSerializer
 
 
 class SecureUrlViewSet(ModelViewSet):
