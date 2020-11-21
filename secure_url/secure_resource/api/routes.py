@@ -6,7 +6,7 @@ router = SimpleRouter()
 router.register("resources/url", views.SecureUrlViewSet)
 router.register("resources/file", views.SecureFileViewSet)
 router.register(
-    "resources/file_redirect",
+    "resources/file/redirect",
     views.FileRedirectRetrieveModelViewSet,
 )
-router.register("resources/url_redirect", views.UrlRedirectRetrieveModelViewSet)
+router.register("resources/url/redirect", views.UrlRedirectRetrieveModelViewSet)

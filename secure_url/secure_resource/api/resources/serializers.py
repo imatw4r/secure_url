@@ -6,15 +6,15 @@ from secure_resource.models import SecureFile, SecureUrl, FileRedirect, UrlRedir
 class UrlSerializer(serializers.ModelSerializer):
     class Meta:
         model = SecureUrl
-        fields = ("source_url", "password")
-        read_only_fields = ("password",)
+        fields = ("source_url", "password", "visited")
+        read_only_fields = ("password", "visited")
 
 
 class SecureFileSerializer(serializers.ModelSerializer):
     class Meta:
         model = SecureFile
-        fields = ("source_file", "password")
-        read_only_fields = ("password",)
+        fields = ("source_file", "password", "visited")
+        read_only_fields = ("password", "visited")
 
 
 class FileRedirectSerializer(serializers.ModelSerializer):
@@ -26,7 +26,7 @@ class FileRedirectSerializer(serializers.ModelSerializer):
 
 
 class UrlRedirectSerializer(serializers.ModelSerializer):
-    source = serializers.Field(source="source.source_url")
+    source = serializers.CharField(source="source.source_url")
 
     class Meta:
         model = UrlRedirect

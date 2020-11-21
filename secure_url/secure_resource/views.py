@@ -46,6 +46,9 @@ def handle_redirect(model):
                 return render(request, "redirect.html", {"form": form})
             password = form.cleaned_data["password"]
             if password == obj.get_password():
+                # @TODO: This should be done in an asynch way in a task
+                #        with queue
+                obj.source.increase_count()
                 return HttpResponseRedirect(obj.get_source_url())
             else:
                 form.add_error(None, "Incorect password")

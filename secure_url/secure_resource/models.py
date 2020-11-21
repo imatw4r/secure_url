@@ -24,6 +24,8 @@ def set_expiration_date():
 class SecureUrl(models.Model):
     source_url = models.URLField(max_length=128, null=False)
     password = models.CharField(max_length=128, default=generate_password)
+    visited = models.PositiveIntegerField(default=0)
+    created_at = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return self.source_url
@@ -31,16 +33,26 @@ class SecureUrl(models.Model):
     def get_absolute_url(self):
         return reverse("url-detail", kwargs={"pk": self.pk})
 
+    def increase_count(self):
+        self.visited += 1
+        self.save()
+
 
 class SecureFile(models.Model):
     source_file = models.FileField(upload_to=get_file_path, null=False)
     password = models.CharField(max_length=128, default=generate_password)
+    visited = models.PositiveIntegerField(default=0)
+    created_at = models.DateField(auto_now_add=True)
 
     def __str__(self):
         return str(self.source_file)
 
     def get_absolute_url(self):
         return reverse("file-detail", kwargs={"pk": self.pk})
+
+    def increase_count(self):
+        self.visited += 1
+        self.save()
 
 
 class FileRedirect(models.Model):
