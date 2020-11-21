@@ -1,0 +1,12 @@
+version: "3"
+services:
+  app:
+    build: .
+    image: secure-url-app
+    container_name: secure-url-app
+    environment:
+      - URL_EXPIRATION_TIME=36400 # in seconds
+    volumes:
+      - ./secure_url:/app
+    ports:
+      - 8000:8000
