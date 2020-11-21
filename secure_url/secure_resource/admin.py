@@ -5,19 +5,21 @@ from secure_resource.models import SecureFile, SecureUrl, FileRedirect, UrlRedir
 
 @admin.register(SecureFile)
 class SecureFileAdminModel(admin.ModelAdmin):
-    pass
+    list_display = ["source_file", "created_at", "password"]
 
 
 @admin.register(SecureUrl)
 class SecureUrlAdminModel(admin.ModelAdmin):
-    pass
+    list_display = ["source_url", "created_at", "password"]
 
 
 @admin.register(FileRedirect)
 class FileRedirectAdminModel(admin.ModelAdmin):
-    pass
+    list_display = ["source", "expires_at"]
+    list_filter = ["expires_at"]
 
 
 @admin.register(UrlRedirect)
 class UrlRedirectAdminModel(admin.ModelAdmin):
-    pass
+    list_display = ["source", "expires_at"]
+    list_filter = ["expires_at"]

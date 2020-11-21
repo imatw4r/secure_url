@@ -22,7 +22,7 @@ class FileRedirectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FileRedirect
-        fields = ("expires_in", "source")
+        fields = ("expires_at", "source")
 
 
 class UrlRedirectSerializer(serializers.ModelSerializer):
@@ -30,4 +30,4 @@ class UrlRedirectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UrlRedirect
-        fields = ("expires_in", "source")
+        fields = ("expires_at", "source")

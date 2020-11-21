@@ -36,7 +36,7 @@ def handle_redirect(model):
         obj = get_object_or_404(model, pk=pk)
         now = timezone.now()
 
-        if now >= obj.expires_in:
+        if now >= obj.expires_at:
             return HttpResponseGone("Link has expired.")
 
         form = ConfirmPasswordForm()

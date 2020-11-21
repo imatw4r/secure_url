@@ -25,7 +25,7 @@ class SecureUrl(models.Model):
     source_url = models.URLField(max_length=128, null=False)
     password = models.CharField(max_length=128, default=generate_password)
     visited = models.PositiveIntegerField(default=0)
-    created_at = models.DateField(auto_now_add=True)
+    created_at = models.DateField(auto_now_add=True, editable=True)
 
     def __str__(self):
         return self.source_url
@@ -42,7 +42,7 @@ class SecureFile(models.Model):
     source_file = models.FileField(upload_to=get_file_path, null=False)
     password = models.CharField(max_length=128, default=generate_password)
     visited = models.PositiveIntegerField(default=0)
-    created_at = models.DateField(auto_now_add=True)
+    created_at = models.DateField(auto_now_add=True, editable=True)
 
     def __str__(self):
         return str(self.source_file)
@@ -59,7 +59,7 @@ class FileRedirect(models.Model):
     source = models.OneToOneField(
         SecureFile, on_delete=models.CASCADE, related_name="redirect"
     )
-    expires_in = models.DateTimeField(default=set_expiration_date, null=False)
+    expires_at = models.DateTimeField(default=set_expiration_date, null=False)
 
     def get_absolute_url(self):
         return reverse("file-redirect", kwargs={"pk": self.pk})
@@ -70,12 +70,15 @@ class FileRedirect(models.Model):
     def get_password(self):
         return self.source.password
 
+    def __str__(self):
+        return str(self.source)
+
 
 class UrlRedirect(models.Model):
     source = models.OneToOneField(
         SecureUrl, on_delete=models.CASCADE, related_name="redirect"
     )
-    expires_in = models.DateTimeField(default=set_expiration_date, null=False)
+    expires_at = models.DateTimeField(default=set_expiration_date, null=False)
 
     def get_absolute_url(self):
         return reverse("url-redirect", kwargs={"pk": self.pk})
@@ -85,3 +88,6 @@ class UrlRedirect(models.Model):
 
     def get_password(self):
         return self.source.password
+
+    def __str__(self):
+        return str(self.source)
