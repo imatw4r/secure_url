@@ -1,20 +1,42 @@
-FROM jonatkinson/python-poetry:3.7
+# For more information, please refer to https://aka.ms/vscode-docker-python
+FROM python:3.8 AS build
 
-ENV PYTHONUNBUFFERED 1
+# Keeps Python from generating .pyc files in the container
 ENV PYTHONDONTWRITEBYTECODE 1
 
-ADD pyproject.toml . 
+# Turns off buffering for easier container logging
+ENV PYTHONUNBUFFERED 1
 
-RUN poetry install
+# Install poetry
+ENV POETRY_VERSION=1.1.0
+RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
+ENV PATH="${PATH}:/root/.poetry/bin"
 
 WORKDIR /app
 
+ADD poetry.lock .
+ADD pyproject.toml .
+
+# Install project dependencies
+RUN poetry install --no-dev
+
+RUN poetry export -E server --without-hashes -f requirements.txt -o /requirements.txt
+RUN pip install --no-cache-dir -r /requirements.txt \
+    && rm -rf /requirements.txt
+
 ADD secure_url .
 
+CMD ["gunicorn", "secure_url.wsgi", "--bind", ":8000", "--chdir=/app"]
 
-RUN poetry run python manage.py makemigrations
-RUN poetry run python manage.py migrate
-
-CMD poetry run python manage.py runserver 0.0.0.0:8000
+# CMD gunicorn secure_url.wsgi --log-syslog --bind 8000
 
 EXPOSE 8000
+# CMD ["python", "app.py"]
+
+# FROM build AS testing
+
+# RUN poetry install
+
+# RUN poetry run pytest
+
+FROM build
