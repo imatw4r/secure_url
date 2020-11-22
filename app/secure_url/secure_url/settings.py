@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 import os
 import environ
+import django_heroku
 
 env = environ.Env(DEBUG=(bool, True))
 
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     # as otherwise signals are not loaded
     "secure_resource.apps.SecureResourceConfig",
     "user_agent",
+    "users",
 ]
 
 MIDDLEWARE = [
@@ -83,10 +85,16 @@ WSGI_APPLICATION = "secure_url.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": env("POSTGRES_DB", default="postgres"),
+        "HOST": env("POSTGRES_HOST", default="postgres"),
+        "USER": env("POSTGRES_USER", default="postgres"),
+        "PASSWORD": env("POSTGRES_PASSWORD", default="postgres"),
+        "PORT": "5432",
+        "OPTIONS": {},
     }
 }
 
@@ -133,8 +141,10 @@ LOGIN_URL = "/login/"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 MEDIA_URL = "/media/"
-LOGIN_REDIRECT_URL = "/home"
+LOGIN_REDIRECT_URL = "/"
 
 LOGIN_URL = "/login/"
 
 URL_EXPIRATION_TIME = env("URL_EXPIRATION_TIME", default=24 * 60 * 60)
+
+django_heroku.settings(locals())

@@ -6,6 +6,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 
 # Turns off buffering for easier container logging
 ENV PYTHONUNBUFFERED 1
+ENV PIP_DISABLE_PIP_VERSION_CHECK 1
 
 # Install poetry
 ENV POETRY_VERSION=1.1.0
@@ -24,11 +25,13 @@ RUN poetry export --without-hashes -f requirements.txt -o requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt \
     && rm -rf requirements.txt
 
+ADD docker-entrypoint.sh .
 
-ADD secure_url .
+ADD app/secure_url .
 
 RUN echo "RUNNING APPLICATION"
-CMD gunicorn secure_url.wsgi --bind :8000 --chdir=/app
+CMD ["./docker-entrypoint.sh"]
+# CMD gunicorn secure_url.wsgi --bind :8000 --chdir=/app
 
 EXPOSE 8000
 

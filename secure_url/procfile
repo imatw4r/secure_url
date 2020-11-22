@@ -1,1 +1,0 @@
-web: gunicorn seure_url.wsgi --log-file -
