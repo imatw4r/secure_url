@@ -29,7 +29,7 @@ SECRET_KEY = "!4(wuy*d-&b+^q$y%^s#brr3u3t0!#^b2&t4n$re3hrcu^zlm#"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["https://secure-url-app.herokuapp.com/", "127.0.0.1"]
 
 
 # Application definition
