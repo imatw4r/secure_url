@@ -20,13 +20,14 @@ ADD pyproject.toml .
 # Install project dependencies
 RUN poetry install --no-dev
 
-RUN poetry export -E server --without-hashes -f requirements.txt -o /requirements.txt
-RUN pip install --no-cache-dir -r /requirements.txt \
-    && rm -rf /requirements.txt
+RUN poetry export --without-hashes -f requirements.txt -o requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt \
+    && rm -rf requirements.txt
 
 
 ADD secure_url .
 
+RUN echo "RUNNING APPLICATION"
 CMD gunicorn secure_url.wsgi --bind :8000 --chdir=/app
 
 EXPOSE 8000
