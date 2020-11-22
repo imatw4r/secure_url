@@ -24,14 +24,12 @@ RUN poetry export -E server --without-hashes -f requirements.txt -o /requirement
 RUN pip install --no-cache-dir -r /requirements.txt \
     && rm -rf /requirements.txt
 
+
 ADD secure_url .
 
-CMD ["gunicorn", "secure_url.wsgi", "--bind", ":8000", "--chdir=/app"]
-
-# CMD gunicorn secure_url.wsgi --log-syslog --bind 8000
+CMD gunicorn secure_url.wsgi --bind :8000 --chdir=/app
 
 EXPOSE 8000
-# CMD ["python", "app.py"]
 
 # FROM build AS testing
 
