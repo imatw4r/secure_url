@@ -29,9 +29,7 @@ ADD docker-entrypoint.sh .
 
 ADD app/secure_url .
 
-RUN echo "RUNNING APPLICATION"
 CMD ["./docker-entrypoint.sh"]
-# CMD gunicorn secure_url.wsgi --bind :8000 --chdir=/app
 
 EXPOSE 8000
 
