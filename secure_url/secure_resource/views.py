@@ -31,6 +31,10 @@ class SecureUrlDetailView(LoginRequiredMixin, DetailView):
     template_name = "detail.html"
 
 
+def index(request):
+    return render(request, "home.html")
+
+
 def handle_redirect(model):
     def redirect_view(request, pk):
         obj = get_object_or_404(model, pk=pk)

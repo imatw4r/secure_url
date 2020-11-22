@@ -7,6 +7,7 @@ import secure_resource.views as views
 
 
 urlpatterns = [
+    path("", views.index, name="home"),
     path("file/create", views.SecureFileCreateView.as_view(), name="file-create"),
     path(
         "file/detail/<int:pk>", views.SecureFileDetailView.as_view(), name="file-detail"
