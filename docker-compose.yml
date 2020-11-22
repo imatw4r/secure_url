@@ -6,14 +6,14 @@ services:
     container_name: secure-url-app
     environment:
       - URL_EXPIRATION_TIME=36400 # in seconds
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=postgres
-      - POSTGRES_HOST=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD-postgres}
+      - POSTGRES_USER=${POSTGRES_USER-postgres}
+      - POSTGRES_DB=${POSTGRES_DB-postgres}
+      - POSTGRES_HOST=${POSTGRES_HOST-postgres}
       - ADMIN_USER=admin
       - ADMIN_PASSWORD=admin
       - ADMIN_EMAIL=admin@admin.com
-      - DEBUG=True
+      - DEBUG=False
     ports:
       - 8000:8000
     depends_on:
