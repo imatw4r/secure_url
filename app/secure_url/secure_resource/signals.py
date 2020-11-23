@@ -1,17 +1,17 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from secure_resource.models import SecureUrl, SecureFile, FileRedirect, UrlRedirect
+from secure_resource.models import (
+    SecureElement,
+    ElementRedirect,
+)
 
 
-@receiver(post_save, sender=SecureFile)
-def create_file_redirect(sender, instance, created, **kwargs):
+@receiver(post_save, sender=SecureElement)
+def create_redirect(sender, instance, created, **kwargs):
     if not created:
         return
-    FileRedirect.objects.create(source=instance)
+    redir_type = ElementRedirect.URL
+    if instance.source_file:
+        redir_type = ElementRedirect.FILE
 
-
-@receiver(post_save, sender=SecureUrl)
-def create_url_redirect(sender, instance, created, **kwargs):
-    if not created:
-        return
-    UrlRedirect.objects.create(source=instance)
+    ElementRedirect.objects.create(element=instance, redirect_type=redir_type)

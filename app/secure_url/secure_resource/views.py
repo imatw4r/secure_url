@@ -5,29 +5,29 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView
 from django.views.generic.detail import DetailView
 
-from secure_resource.models import SecureFile, SecureUrl, FileRedirect, UrlRedirect
-from secure_resource.forms import ConfirmPasswordForm
+from secure_resource.models import (
+    SecureElement,
+    ElementRedirect,
+)
+from secure_resource.forms import (
+    ConfirmPasswordForm,
+)
 
 
 class SecureUrlCreateView(LoginRequiredMixin, CreateView):
+    model = SecureElement
     template_name = "create.html"
-    model = SecureUrl
     fields = ("source_url",)
 
 
 class SecureFileCreateView(LoginRequiredMixin, CreateView):
+    model = SecureElement
     template_name = "create.html"
-    model = SecureFile
     fields = ("source_file",)
 
 
-class SecureFileDetailView(LoginRequiredMixin, DetailView):
-    model = SecureFile
-    template_name = "detail.html"
-
-
-class SecureUrlDetailView(LoginRequiredMixin, DetailView):
-    model = SecureUrl
+class SecureElementDetailView(LoginRequiredMixin, DetailView):
+    model = SecureElement
     template_name = "detail.html"
 
 
@@ -35,38 +35,29 @@ def index(request):
     return render(request, "home.html")
 
 
-def handle_redirect(model):
-    def redirect_view(request, pk):
-        obj = get_object_or_404(model, pk=pk)
-        now = timezone.now()
+def redirect_element_view(request, pk):
+    obj = get_object_or_404(ElementRedirect, pk=pk)
+    now = timezone.now()
 
-        if now >= obj.expires_at:
-            return HttpResponseGone("Link has expired.")
+    if now >= obj.expires_at:
+        return HttpResponseGone("Link has expired.")
 
-        form = ConfirmPasswordForm()
-        if request.method == "POST":
-            form = ConfirmPasswordForm(request.POST)
-            if not form.is_valid():
-                return render(request, "redirect.html", {"form": form})
-            password = form.cleaned_data["password"]
-            if password == obj.get_password():
-                # @TODO: This should be done in an asynch way in a task
-                #        with queue
-                obj.source.increase_count()
-                return HttpResponseRedirect(obj.get_source_url())
-            else:
-                form.add_error(None, "Incorect password")
+    form = ConfirmPasswordForm()
+    if request.method == "POST":
+        form = ConfirmPasswordForm(request.POST)
+        if not form.is_valid():
+            return render(request, "redirect.html", {"form": form})
+        password = form.cleaned_data["password"]
+        if password == obj.get_password():
+            # @TODO: This should be done in an asynch way in a task
+            #        with queue
+            obj.increase_count()
+            return HttpResponseRedirect(obj.get_source_url())
+        else:
+            form.add_error(None, "Incorect password")
 
-        return render(
-            request,
-            "redirect.html",
-            {
-                "form": form,
-            },
-        )
-
-    return redirect_view
-
-
-redirect_file_view = handle_redirect(FileRedirect)
-redirect_url_view = handle_redirect(UrlRedirect)
+    return render(
+        request,
+        "redirect.html",
+        {"form": form},
+    )

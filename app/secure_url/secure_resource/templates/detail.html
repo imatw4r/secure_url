@@ -1,3 +1,7 @@
 <p>Password: {{ object.password }}</p>
 <p>Expires at: {{ object.redirect.expires_at |date:"D d M Y h:i a e" }}</p>
-<p>Secure URL: <a href="{{ object.redirect.get_absolute_url }}">Click</a></p>
+
+<p>
+  Secure URL:
+  <a href="{% url 'element-redirect' object.redirect.pk %}"> CLICK </a>
+</p>

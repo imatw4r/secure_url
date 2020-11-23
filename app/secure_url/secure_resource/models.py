@@ -20,73 +20,52 @@ def set_expiration_date():
     return timezone.now() + datetime.timedelta(seconds=settings.URL_EXPIRATION_TIME)
 
 
-class SecureUrl(models.Model):
-    source_url = models.URLField(max_length=128, null=False)
+class SecureElement(models.Model):
+    source_url = models.URLField(max_length=128, null=True)
+    source_file = models.FileField(upload_to=get_file_path, null=True)
     password = models.CharField(max_length=128, default=generate_password)
-    visited = models.PositiveIntegerField(default=0)
     created_at = models.DateField(auto_now_add=True, editable=True)
 
-    def __str__(self):
-        return self.source_url
+    def get_source_url(self):
+        if self.source_url:
+            return self.source_url
+        return self.source_file.url
+
+    def get_password(self):
+        return self.password
 
     def get_absolute_url(self):
-        return reverse("url-detail", kwargs={"pk": self.pk})
+        return reverse("element-detail", kwargs={"pk": self.pk})
 
     def increase_count(self):
         self.visited += 1
         self.save()
 
 
-class SecureFile(models.Model):
-    source_file = models.FileField(upload_to=get_file_path, null=False)
-    password = models.CharField(max_length=128, default=generate_password)
+class ElementRedirect(models.Model):
+    FILE = "FILE"
+    URL = "URL"
+    TYPES = [
+        (FILE, "File"),
+        (URL, "Url"),
+    ]
+    element = models.OneToOneField(
+        SecureElement, on_delete=models.CASCADE, related_name="redirect"
+    )
+    expires_at = models.DateTimeField(default=set_expiration_date, null=False)
+    redirect_type = models.CharField(max_length=5, choices=TYPES, null=False)
     visited = models.PositiveIntegerField(default=0)
     created_at = models.DateField(auto_now_add=True, editable=True)
 
-    def __str__(self):
-        return str(self.source_file)
-
     def get_absolute_url(self):
-        return reverse("file-detail", kwargs={"pk": self.pk})
+        return reverse("element-redirect", kwargs={"pk": self.pk})
+
+    def get_password(self):
+        return self.element.password
+
+    def get_source_url(self):
+        return self.element.get_source_url()
 
     def increase_count(self):
         self.visited += 1
         self.save()
-
-
-class FileRedirect(models.Model):
-    source = models.OneToOneField(
-        SecureFile, on_delete=models.CASCADE, related_name="redirect"
-    )
-    expires_at = models.DateTimeField(default=set_expiration_date, null=False)
-
-    def get_absolute_url(self):
-        return reverse("file-redirect", kwargs={"pk": self.pk})
-
-    def get_source_url(self):
-        return self.source.source_file.url
-
-    def get_password(self):
-        return self.source.password
-
-    def __str__(self):
-        return str(self.source)
-
-
-class UrlRedirect(models.Model):
-    source = models.OneToOneField(
-        SecureUrl, on_delete=models.CASCADE, related_name="redirect"
-    )
-    expires_at = models.DateTimeField(default=set_expiration_date, null=False)
-
-    def get_absolute_url(self):
-        return reverse("url-redirect", kwargs={"pk": self.pk})
-
-    def get_source_url(self):
-        return self.source.source_url
-
-    def get_password(self):
-        return self.source.password
-
-    def __str__(self):
-        return str(self.source)

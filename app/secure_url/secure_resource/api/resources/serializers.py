@@ -1,33 +1,33 @@
 from rest_framework import serializers
 
-from secure_resource.models import SecureFile, SecureUrl, FileRedirect, UrlRedirect
+from secure_resource.models import ElementRedirect, SecureElement
 
 
-class UrlSerializer(serializers.ModelSerializer):
+class SecureUrlSerializer(serializers.ModelSerializer):
     class Meta:
-        model = SecureUrl
-        fields = ("source_url", "password", "visited")
-        read_only_fields = ("password", "visited")
+        model = SecureElement
+        fields = ("source_url", "password")
+        read_only_fields = ("password",)
 
 
 class SecureFileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = SecureFile
-        fields = ("source_file", "password", "visited")
-        read_only_fields = ("password", "visited")
+        model = SecureElement
+        fields = ("source_file", "password")
+        read_only_fields = ("password",)
 
 
 class FileRedirectSerializer(serializers.ModelSerializer):
-    source = serializers.CharField(source="source.source_file")
+    source = serializers.CharField(source="element.source_file")
 
     class Meta:
-        model = FileRedirect
+        model = ElementRedirect
         fields = ("expires_at", "source")
 
 
 class UrlRedirectSerializer(serializers.ModelSerializer):
-    source = serializers.CharField(source="source.source_url")
+    source = serializers.CharField(source="element.source_url")
 
     class Meta:
-        model = UrlRedirect
+        model = ElementRedirect
         fields = ("expires_at", "source")
